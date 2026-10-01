@@ -11,6 +11,13 @@
 </head>
 <body>
   <main>
+    <nav class="site-nav" aria-label="Site">
+      <a href="index.html" aria-current="page">Interactive demo</a>
+      <a href="teach.html">中文教学</a>
+      <a href="docs/math.md">docs/math.md</a>
+      <a href="sample-output.txt">sample-output.txt</a>
+      <a href="https://github.com/weiwan-gmail/rubiks-cube-demo">GitHub</a>
+    </nav>
     <header>
       <h1>Rubik’s Cube — 54-sticker demo</h1>
       <p class="sub">
@@ -75,20 +82,57 @@
       <h2>How this maps to the math</h2>
       <p lang="zh-CN">
         <strong>中文简述：</strong>已还原态 = 群单位元。六个面转生成元是 54 贴纸上的置换；
-        串乘对应复合；逆序列把状态送回单位元。详见
+        串乘对应复合；逆序列把状态送回单位元。完整中文课见
+        <a href="teach.html">teach.html</a>；简报见
         <a href="docs/math.md">docs/math.md</a>。本页不发明视频里没有的公式。
       </p>
       <ul>
         <li><strong>Identity = solved:</strong> all 54 stickers on home colors → <code>solved=true</code>.</li>
         <li><strong>Generators:</strong> <code>U D L R F B</code> (and <code>'</code> / <code>2</code>) as length-54 perms.</li>
         <li><strong>Scramble then inverse:</strong> word \(w\) then \(w^{-1}\) restores \(e\).</li>
-        <li>Full writeup (Chinese, fact / video / hypothesis tagged): <a href="docs/math.md">docs/math.md</a>.</li>
+        <li>Teaching page (Chinese, 【事实】 / 【视频观察】 / 【假设】 tagged): <a href="teach.html">teach.html</a>.</li>
+        <li>Shorter writeup: <a href="docs/math.md">docs/math.md</a>.</li>
       </ul>
+    </section>
+
+    <section class="panel" lang="zh-CN" id="run-demo">
+      <h2>如何运行 demo</h2>
+      <p>
+        本页的 <strong>Apply scramble / Apply inverse</strong> 与仓库里的
+        <code>python/demo.py</code> 是同一条路：拧乱再取逆，回到已解（单位元）。
+        默认拧法 <code>R U R' U'</code>。
+      </p>
+      <p>在仓库根目录执行（Python 3.10+，仅标准库）：</p>
+      <pre class="run-pre">python3 python/demo.py
+python3 python/demo.py "F R U R' U' F'"</pre>
+      <p>
+        完整捕获输出：<a href="sample-output.txt">sample-output.txt</a>
+        · 中文课：<a href="teach.html">teach.html</a>
+        · 数学简报：<a href="docs/math.md">docs/math.md</a>
+      </p>
+      <p class="muted">
+        <code>themathflow.mp4</code> 只作本地参考，不随本仓库上传；片内无文字公式。
+      </p>
+      <pre class="run-pre">3. Scramble: R U R' U'
+tokens: ['R', 'U', "R'", "U'"]
+...
+solved=False  stickers_off_home=12
+
+4. Inverse sequence → expect solved
+inverse tokens: ['U', 'R', "U'", "R'"]
+...
+solved=True  stickers_off_home=0
+
+5. Result
+scramble then inverse returns to solved: True
+OK — face turns permute stickers; inverse restores identity.</pre>
     </section>
 
     <footer>
       <p>
         Repo: <a href="https://github.com/weiwan-gmail/rubiks-cube-demo">weiwan-gmail/rubiks-cube-demo</a>
+        · Pages: <a href="https://weiwan-gmail.github.io/rubiks-cube-demo/">weiwan-gmail.github.io/rubiks-cube-demo</a>
+        · <a href="teach.html">中文教学</a>
         · Static HTML/CSS/JS · Python reference under <code>python/</code>
         · Local: open <code>index.html</code> or <code>python3 -m http.server</code> in the repo root.
       </p>

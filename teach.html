@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>魔方里的数学：从贴纸到 Rubik 群</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"/>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$', right: '$', display: false},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  });"></script>
+<style>
+:root {
+  --bg: #faf8f5;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #5a5a5a;
+  --accent: #2c5f8a;
+  --border: #e0d8ce;
+  --fact: #1b7a4e;
+  --conv: #8a5a1b;
+  --proof: #5a3d8a;
+  --code: #1b4f7a;
+  --video: #7a1b4e;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 17px;
+}
+.wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+header.hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1.4rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+header.hero h1 {
+  margin: 0 0 .5rem;
+  font-size: 1.65rem;
+  color: var(--accent);
+  line-height: 1.35;
+}
+header.hero .sub {
+  color: var(--muted);
+  font-size: .95rem;
+  margin: 0;
+}
+nav.toc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem 1.1rem;
+  margin-bottom: 1.5rem;
+}
+nav.toc h2 {
+  margin: 0 0 .55rem;
+  font-size: 1.05rem;
+  color: var(--accent);
+  border: none;
+  padding: 0;
+}
+nav.toc ol {
+  margin: 0;
+  padding-left: 1.3rem;
+}
+nav.toc li { margin: .22rem 0; font-size: .95rem; }
+nav.toc a { color: var(--accent); text-decoration: none; }
+nav.toc a:hover { text-decoration: underline; }
+main article {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem 2rem;
+}
+h2 {
+  margin-top: 2.2rem;
+  padding-top: .7rem;
+  border-top: 2px solid var(--border);
+  color: var(--accent);
+  font-size: 1.35rem;
+  scroll-margin-top: 1rem;
+}
+article > h2:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+h3 {
+  margin-top: 1.4rem;
+  font-size: 1.12rem;
+  color: #244a6b;
+  scroll-margin-top: 1rem;
+}
+p { margin: .7rem 0; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: .95rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: .45rem .65rem;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #f0ebe4; }
+code {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: .88em;
+  background: #f3efe8;
+  padding: .1em .35em;
+  border-radius: 4px;
+}
+pre {
+  background: #1e2430;
+  color: #e8ecf2;
+  padding: 1rem 1.1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: .86rem;
+  line-height: 1.5;
+}
+pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+blockquote {
+  margin: 1rem 0;
+  padding: .6rem 1rem;
+  border-left: 4px solid var(--accent);
+  background: #f3f0eb;
+  color: var(--muted);
+}
+.tag {
+  display: inline-block;
+  font-weight: 600;
+  font-size: .92em;
+  padding: .05em .4em;
+  border-radius: 4px;
+  margin-right: .15em;
+}
+.tag-fact { background: #e6f5ee; color: var(--fact); }
+.tag-conv { background: #f8f0e4; color: var(--conv); }
+.tag-proof { background: #efe8f8; color: var(--proof); }
+.tag-code { background: #e4eef8; color: var(--code); }
+.tag-video { background: #f8e4ee; color: var(--video); }
+.katex-display { margin: 1rem 0; overflow-x: auto; overflow-y: hidden; }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+footer {
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: .85rem;
+  text-align: center;
+}
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1rem;
+  margin: 0 0 1rem;
+  font-size: .92rem;
+}
+.site-nav a {
+  color: var(--accent);
+  text-decoration: none;
+  padding: .15rem 0;
+}
+.site-nav a:hover { text-decoration: underline; }
+.site-nav a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom: 2px solid var(--accent);
+}
+.run-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem 1.1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.run-box h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.05rem;
+  color: var(--accent);
+  border: none;
+  padding: 0;
+}
+.run-box p { margin: .45rem 0; font-size: .95rem; }
+.run-box pre { margin: .6rem 0; }
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .wrap { padding: 1rem .75rem 3rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="site-nav" aria-label="站点导航">
+  <a href="index.html">交互 demo</a>
+  <a href="teach.html" aria-current="page">中文教学</a>
+  <a href="docs/math.md">数学简报 math.md</a>
+  <a href="sample-output.txt">Python 样例输出</a>
+  <a href="https://github.com/weiwan-gmail/rubiks-cube-demo">GitHub</a>
+</nav>
+<header class="hero">
+  <h1>魔方里的数学：从贴纸到 Rubik 群</h1>
+  <p class="sub">中学生可读 · 配合 TheMathFlow 三环短片与本仓库 <code>python/</code> demo · 不发明视频公式 · <a href="https://weiwan-gmail.github.io/rubiks-cube-demo/">GitHub Pages</a></p>
+</header>
+<section class="run-box" id="run-demo" lang="zh-CN">
+  <h2>如何运行 demo</h2>
+  <p>网页交互页的 <strong>Apply scramble / Apply inverse</strong> 与 Python <code>python/demo.py</code> 是同一条路：拧乱再取逆，回到已解（单位元）。</p>
+  <pre><code>python3 python/demo.py
+python3 python/demo.py "F R U R' U' F'"</code></pre>
+  <p>在<strong>仓库根目录</strong>执行（Python 3.10+，仅标准库）。完整样例见 <a href="sample-output.txt">sample-output.txt</a>；步骤说明见 <a href="#n">N. 如何运行</a>。</p>
+  <p><code>themathflow.mp4</code> 只作本地参考，不随本仓库上传；片内无文字公式，本文不发明「视频公式」。</p>
+</section>
+<nav class="toc" aria-label="目录">
+  <h2>目录</h2>
+  <ol>
+  <li><a href="#a">A. 这页在讲什么</a></li>
+  <li><a href="#b">B. 魔方零件</a></li>
+  <li><a href="#c">C. 置换</a></li>
+  <li><a href="#d">D. 偶置换</a></li>
+  <li><a href="#e">E. 群</a></li>
+  <li><a href="#f-rubik">F. 六个面转与 Rubik 群</a></li>
+  <li><a href="#g-p">G. 积木群 P</a></li>
+  <li><a href="#h">H. 同态 Φ</a></li>
+  <li><a href="#i-g-ker">I. 证明 G ⊆ ker Φ</a></li>
+  <li><a href="#j-ker-g">J. 证明 ker Φ ⊆ G</a></li>
+  <li><a href="#k">K. 结论</a></li>
+  <li><a href="#l-b">L. 有限展示与路径 B</a></li>
+  <li><a href="#m">M. 代码精讲</a></li>
+  <li><a href="#n">N. 如何运行</a></li>
+  <li><a href="#o">O. 事实 / 假设 / 未证明清单</a></li>
+  <li><a href="#_22">路径索引</a></li>
+  </ol>
+</nav>
+<main>
+<article>
+<blockquote>
+<p>配合本地视频 <code>themathflow.mp4</code>（仅本地参考，未上传本仓库）与可运行 Python demo（<code>python/</code>）。<br>
+本文用短段落、编号步骤、小例子，把每一个新词先讲清楚再使用。网页 demo：<a href="index.html">index.html</a>；数学简报：<a href="docs/math.md">docs/math.md</a>。</p>
+</blockquote>
+<hr>
+<h2 id="a">A. 这页在讲什么</h2>
+<h3 id="_1">怎么读</h3>
+<p>请按 A→O 顺序读。遇到<span class="tag tag-fact">【事实】</span><span class="tag tag-conv">【约定】</span><span class="tag tag-proof">【证明】</span><span class="tag tag-code">【代码】</span>四种标签：</p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="tag tag-fact">【事实】</span></td>
+<td>标准魔方数学里可以核对的结论（与视频有没有写出公式无关）</td>
+</tr>
+<tr>
+<td><span class="tag tag-conv">【约定】</span></td>
+<td>我们为了解说方便做的记号选择（换记号结论不变）</td>
+</tr>
+<tr>
+<td><span class="tag tag-proof">【证明】</span></td>
+<td>用前面已讲的工具，一步一步推出的理由</td>
+</tr>
+<tr>
+<td><span class="tag tag-code">【代码】</span></td>
+<td>对真实文件 <code>python/cube.py</code>、<code>python/demo.py</code> 的对照说明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">和视频的关系</h3>
+<p><span class="tag tag-fact">【事实】</span>本地短片约 15 秒，左侧是立体魔方，右侧是<strong>三个交叠圆环</strong>上的色点；面一转，某一环高亮，点同步滑动；还原后色点收成六个单色簇。</p>
+<p><span class="tag tag-fact">【事实】</span>片内<strong>没有文字、没有公式</strong>。因此本文<strong>不会发明「视频公式」</strong>——所有公式都是标准群论写法，用来解释画面在示意什么。</p>
+<p><span class="tag tag-conv">【约定】</span>把视频里的「点在环上走」理解成：一次面转把若干贴纸沿轨道轮换（见 F、M 节的 <code>rings_str</code>）。三环是投影示意，<strong>不是</strong>「六面各一环」。</p>
+<h3 id="_3">「三环」只是画面，不是神秘公式</h3>
+<p>后面会用到三个<strong>独立的</strong>约束（奇偶、角扭转、棱翻转）。它们合起来决定「哪些乱拼状态其实拧不出来」。<br>
+视频的三环是<strong>可视化装饰</strong>，与这三条约束的「数目碰巧都是 3」不要硬绑成同一个公式。</p>
+<hr>
+<h2 id="b">B. 魔方零件</h2>
+<h3 id="54">54 张贴纸</h3>
+<p><span class="tag tag-fact">【事实】</span>三阶魔方有 6 个面，每面 9 格，共</p>
+<p>\[
+6 \times 9 = 54
+\]</p>
+<p>个有色贴纸位置。Demo 里给每个位置一个编号 <code>0..53</code>。</p>
+<h3 id="_4">三种积木</h3>
+<p>拆开看，除了贴纸，还有可动的<strong>小块</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>数量</th>
+<th>每块有几色</th>
+<th>直观自由度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>角块</td>
+<td>8</td>
+<td>3</td>
+<td>坐哪个角 + 扭转朝向</td>
+</tr>
+<tr>
+<td>棱块</td>
+<td>12</td>
+<td>2</td>
+<td>坐哪条棱 + 翻转朝向</td>
+</tr>
+<tr>
+<td>中心块</td>
+<td>6</td>
+<td>1</td>
+<td>定「哪面是什么颜色」的参考</td>
+</tr>
+</tbody>
+</table>
+<p><span class="tag tag-conv">【约定】</span><strong>已解（目标）</strong>：每个贴纸都在「出厂」位置，颜色成六个单色面。数学上把这个状态叫<strong>单位元</strong>（后面 E 节再正式定义）。</p>
+<p><span class="tag tag-fact">【事实】</span>贴纸模型与块模型等价：贴纸跟着块走。数「有多少种可达状态」时，用块+朝向更省事；画「转一下动哪些贴纸」时，用 54 贴纸更直观。</p>
+<hr>
+<h2 id="c">C. 置换</h2>
+<h3 id="_5">扑克例子：「重排」是什么</h3>
+<p>拿 4 张牌，按位置排成一行：位置 1、2、3、4 上分别是红桃 A、2、3、4。</p>
+<p>现在做一次「洗牌规则」：把位置 1 的牌移到位置 2，2 移到 3，3 移到 4，4 移到 1。<br>
+牌的<strong>集合没变</strong>，只是<strong>位置换了</strong>——这种「位置重排」就叫<strong>置换</strong>。</p>
+<p><span class="tag tag-conv">【约定】</span>写 \(\sigma\)（读作「西格玛」）表示某一次重排规则。\(\sigma(i)=j\) 表示「原来在位置 \(i\) 的东西，被送到位置 \(j\)」。</p>
+<h3 id="_6">轮换写法</h3>
+<p>上面那条规则可以写成一个<strong>轮换</strong>（cycle）：</p>
+<p>\[
+(1\ 2\ 3\ 4)
+\]</p>
+<p>读法：「1 去 2，2 去 3，3 去 4，4 回 1」。</p>
+<p>小例子：</p>
+<ul>
+<li>\((1\ 2)\)：只交换 1 和 2，其余不动。这叫<strong>对换</strong>（两元轮换）。</li>
+<li>\((1\ 2\ 3)\)：1→2→3→1。这叫<strong>3-轮换</strong>。</li>
+</ul>
+<h3 id="_7">复合（先做谁、后做谁）</h3>
+<p><span class="tag tag-conv">【约定】</span>本文写乘法 \(\sigma\tau\) 表示：<strong>先做 \(\tau\)，再做 \(\sigma\)</strong>（从右往左读，像函数复合 \(f(g(x))\)）。</p>
+<p>例子：\(\tau=(1\ 2)\)，\(\sigma=(2\ 3)\)。<br>
+对位置 1：先 \(\tau\) 得 2，再 \(\sigma\) 得 3，所以 \(\sigma\tau\) 把 1 送到 3……你可以自己把 1、2、3 各算一遍，得到 \(\sigma\tau=(1\ 3\ 2)\)。</p>
+<h3 id="_8">逆与恒等</h3>
+<ul>
+<li><strong>恒等置换</strong> \(e\)：谁都不动，\(e(i)=i\)。对应「魔方已解」。</li>
+<li><strong>逆置换</strong> \(\sigma^{-1}\)：把 \(\sigma\) 的每一步倒过来。若 \(\sigma=(1\ 2\ 3\ 4)\)，则 \(\sigma^{-1}=(4\ 3\ 2\ 1)=(1\ 4\ 3\ 2)\)。</li>
+</ul>
+<p><span class="tag tag-fact">【事实】</span>\(\sigma\cdot\sigma^{-1}=e=\sigma^{-1}\cdot\sigma\)。</p>
+<hr>
+<h2 id="d">D. 偶置换</h2>
+<h3 id="_9">对换与奇偶</h3>
+<p><span class="tag tag-fact">【事实】</span>任意置换都可以写成若干个<strong>对换</strong>的乘积（写法不唯一，但对换个数的<strong>奇偶性</strong>是唯一的）。</p>
+<ul>
+<li>写成<strong>偶数个</strong>对换 → <strong>偶置换</strong></li>
+<li>写成<strong>奇数个</strong>对换 → <strong>奇置换</strong></li>
+</ul>
+<p><span class="tag tag-conv">【约定】</span>偶置换全体记作 \(A_n\)（作用在 \(n\) 个位置上时）。恒等是偶置换（0 个对换）。</p>
+<h3 id="4-">把 4-轮换拆成对换——逐步算</h3>
+<p><span class="tag tag-fact">【事实】</span>任意 \(k\)-轮换都可以写成 \(k-1\) 个对换的乘积：</p>
+<p>\[
+(a_1\ a_2\ \cdots\ a_k) = (a_1\ a_k)\,(a_1\ a_{k-1})\,\cdots\,(a_1\ a_2).
+\]</p>
+<p><span class="tag tag-proof">【证明·小例子】</span>取 \((1\ 2\ 3\ 4)\)。按上面公式：</p>
+<p>\[
+(1\ 2\ 3\ 4) = (1\ 4)\,(1\ 3)\,(1\ 2).
+\]</p>
+<p>右边是 <strong>3</strong> 个对换。3 是奇数 ⇒ <strong>4-轮换是奇置换</strong>。</p>
+<p>再核对一张表（务必记住）：</p>
+<table>
+<thead>
+<tr>
+<th>轮换长度 \(k\)</th>
+<th>对换个数 \(k-1\)</th>
+<th>奇偶</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2（对换本身）</td>
+<td>1</td>
+<td><strong>奇</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td><strong>偶</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td><strong>奇</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="tag tag-conv">【约定】</span>后面讲面转时会用到：一次 90° 面转在<strong>角</strong>上是一个 4-轮换（奇），在<strong>棱</strong>上也是一个 4-轮换（奇）。单独看角是奇、单独看棱也是奇，但二者奇偶<strong>相同</strong>——这正是不变量要保护的东西（见 I 节）。</p>
+<p>先手头备好两件工具：</p>
+<ul>
+<li>3-轮换 = 2 个对换 = <strong>偶</strong>（所以「只转三个角」这类动作在偶置换世界里是合法零件）</li>
+<li>两个不相交对换 \((a\ b)(c\ d)\) = 偶（奇×奇）</li>
+</ul>
+<hr>
+<h2 id="e">E. 群</h2>
+<h3 id="_10">集合 + 运算</h3>
+<p><span class="tag tag-conv">【约定】</span><strong>群</strong>是一套「可以合在一起做、还能撤销」的规则，满足四条：</p>
+<p>设 \(G\) 是一个集合，上面有运算 \(\cdot\)（把两个元素合成一个）：</p>
+<ol>
+<li><strong>封闭</strong>：\(a,b\in G\) ⇒ \(a\cdot b\in G\)</li>
+<li><strong>结合律</strong>：\((a\cdot b)\cdot c = a\cdot(b\cdot c)\)</li>
+<li><strong>单位元</strong>：存在 \(e\)，使 \(a\cdot e=e\cdot a=a\)</li>
+<li><strong>逆元</strong>：每个 \(a\) 有 \(a^{-1}\)，使 \(a\cdot a^{-1}=e\)</li>
+</ol>
+<h3 id="_11">两个小例子</h3>
+<ol>
+<li><strong>整数加法</strong> \((\mathbb{Z},+)\)：单位元是 0，\(5\) 的逆是 \(-5\)。结合律熟悉。</li>
+<li><strong>置换的复合</strong>：所有 \(\{1,\ldots,n\}\) 上的置换，在「复合」下成群，叫对称群 \(S_n\)。单位元 = 恒等；逆 = 倒着做。</li>
+</ol>
+<p><span class="tag tag-fact">【事实】</span>偶置换全体 \(A_n\) 在复合下也成群（是 \(S_n\) 的子群）。</p>
+<hr>
+<h2 id="f-rubik">F. 六个面转与 Rubik 群</h2>
+<h3 id="_12">面的名字</h3>
+<p><span class="tag tag-conv">【约定】</span>六个面（英文首字母，Singmaster 记号）：</p>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>英文</th>
+<th>中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U</td>
+<td>Up</td>
+<td>上面</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Down</td>
+<td>下面</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Left</td>
+<td>左面</td>
+</tr>
+<tr>
+<td>R</td>
+<td>Right</td>
+<td>右面</td>
+</tr>
+<tr>
+<td>F</td>
+<td>Front</td>
+<td>前面</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Back</td>
+<td>后面</td>
+</tr>
+</tbody>
+</table>
+<p><span class="tag tag-conv">【约定】</span>\(U\) 表示「上面顺时针转 90°」（从该面外侧看）。\(U'\) 或 \(U^{-1}\) = 逆时针 90°；\(U^2\) = 180°。</p>
+<h3 id="_13">一次面转如何动贴纸</h3>
+<p><span class="tag tag-fact">【事实】</span>转某一个面 90° 时：</p>
+<ol>
+<li><strong>本面</strong> 8 张非中心贴纸：4 个角位置做一个 4-轮换，4 个棱位置做另一个 4-轮换；中心贴纸不动。</li>
+<li><strong>侧面一圈</strong>：与该面相邻的四条「边」上的贴纸，再做成若干个 4-轮换（代码里 <code>_U_side</code> 等）。</li>
+</ol>
+<p>合计：一次 90° 面转通常动 <strong>20</strong> 张贴纸（8 本面 + 12 侧面），中心不动。</p>
+<h3 id="rubik">生成元与 Rubik 群</h3>
+<p><span class="tag tag-conv">【约定】</span>把六个面转看成六个置换，叫<strong>生成元</strong>。</p>
+<p><span class="tag tag-fact">【事实】</span><strong>Rubik 群</strong> \(G\) 是「所有能由面转一个接一个拧出来的动作」全体：</p>
+<p>\[
+G = \langle U, D, L, R, F, B \rangle
+\]</p>
+<p>也就是：所有形如「若干个面转（含逆、180°）乘在一起」的置换。</p>
+<ul>
+<li>单位元 \(e\) = <strong>已解</strong></li>
+<li>\(G\) 里的每个元素 = 一个<strong>可达状态</strong>（从已解拧出来）</li>
+</ul>
+<p><span class="tag tag-code">【代码】</span><code>GENERATORS</code> 存六个顺时针 90°；<code>MOVES</code> 再补上 <code>U'</code>、<code>U2</code> 等。</p>
+<hr>
+<h2 id="g-p">G. 积木群 P</h2>
+<p>若允许<strong>拆开再任意装回去</strong>（不要求能面转拧到），则自由度更大。</p>
+<p><span class="tag tag-fact">【事实】</span>粗算「积木乱拼」空间大小：</p>
+<ul>
+<li>8 个角任意排位置：\(8!\)</li>
+<li>每个角 3 种扭转：\(3^8\)</li>
+<li>12 条棱任意排位置：\(12!\)</li>
+<li>每条棱 2 种翻转：\(2^{12}\)</li>
+</ul>
+<p>于是定义<strong>积木群</strong>（更大的构型集合，运算是「先装成状态再复合」的抽象）</p>
+<p>\[
+|P| = 8! \cdot 3^8 \cdot 12! \cdot 2^{12}.
+\]</p>
+<p><span class="tag tag-fact">【事实】</span>面转能达到的 \(G\) <strong>严格小于</strong> \(P\)：有些乱拼状态永远拧不出来（例如只交换两块角）。下一节用同态把「差在哪里」说清楚。</p>
+<p>数值上后面会得到 \(|G|=|P|/12\)。</p>
+<hr>
+<h2 id="h">H. 同态 Φ</h2>
+<h3 id="_14">什么是同态</h3>
+<p><span class="tag tag-conv">【约定】</span>两个群之间的映射 \(\Phi:P\to H\) 叫<strong>同态</strong>，若对任意 \(x,y\in P\)：</p>
+<p>\[
+\Phi(xy)=\Phi(x)\,\Phi(y).
+\]</p>
+<p>白话：先在 \(P\) 里复合再映射 = 先映射再在 \(H\) 里复合。同态会「保留运算结构」，并自动把单位元送到单位元。</p>
+<p><span class="tag tag-conv">【约定】</span><strong>核</strong> \(\ker\Phi=\{x\in P:\Phi(x)=e_H\}\)。同态的核一定是子群；后面证明 \(G=\ker\Phi\)。</p>
+<h3 id="math80">目标群 \(C_2\times C_3\times C_2\)</h3>
+<p><span class="tag tag-conv">【约定】</span></p>
+<ul>
+<li>\(C_2=\{0,1\}\) 模 2 加法（奇偶）</li>
+<li>\(C_3=\{0,1,2\}\) 模 3 加法（扭转）</li>
+<li>直积 \(C_2\times C_3\times C_2\)：三个分量各自运算、互不干扰</li>
+</ul>
+<h3 id="_15">三个分量怎么从状态算</h3>
+<p>对积木状态 \(x\in P\)，定义 \(\Phi(x)=(\varepsilon(x),\,t(x),\,f(x))\)：</p>
+<ol>
+<li>
+<p><strong>\(\varepsilon(x)\)</strong>（置换奇偶，取值在 \(C_2\)）<br>
+   看角块位置置换的奇偶，与棱块位置置换的奇偶是否相同。<br>
+   <span class="tag tag-conv">【约定】</span>常见取法：\(\varepsilon=0\) 表示「角偶且棱偶」（或更一般：角与棱奇偶一致）；\(\varepsilon=1\) 表示不一致。<br>
+   <span class="tag tag-fact">【事实】</span>可达状态必须角与棱的奇偶<strong>一致</strong>（可以都偶，也可以像一次 90° 面转后那样都奇）。</p>
+</li>
+<li>
+<p><strong>\(t(x)\)</strong>（角扭转和，取值在 \(C_3\)）<br>
+   每个角给扭转量 \(0,1,2\)（相对「正确朝向」转了多少个 120°），然后</p>
+</li>
+</ol>
+<p>\[
+   t(x)=\sum_{i=1}^{8} o_i \bmod 3.
+   \]</p>
+<ol start="3">
+<li><strong>\(f(x)\)</strong>（棱翻转和，取值在 \(C_2\)）<br>
+   每条棱翻转 \(0\) 或 \(1\)，然后</li>
+</ol>
+<p>\[
+   f(x)=\sum_{j=1}^{12} f_j \bmod 2.
+   \]</p>
+<h3 id="math97">为何 \(\Phi(xy)=\Phi(x)\Phi(y)\)</h3>
+<p><span class="tag tag-proof">【证明思路】</span>（直觉版，严格形式化属进阶）</p>
+<ul>
+<li>先做 \(y\) 再做 \(x\)：角/棱的<strong>位置置换</strong>是复合，奇偶相加（模 2）→ \(\varepsilon\) 同态。  </li>
+<li>扭转：后做的动作在「已被前一动作挪到新位置的角」上再扭；按标准朝向规则计数时，扭转量对模 3 <strong>可加</strong> → \(t\) 同态。  </li>
+<li>翻转同理对模 2 可加 → \(f\) 同态。</li>
+</ul>
+<p>因此三个分量合起来 \(\Phi\) 是同态。</p>
+<p><span class="tag tag-fact">【事实】</span>\(\ker\Phi\) 正好是「奇偶正确、扭转和为 0、翻转和为 0」的那些积木状态，大小为 \(|P|/12\)（因为 \(|C_2\times C_3\times C_2|=2\cdot3\cdot2=12\)，且 \(\Phi\) 是满同态）。</p>
+<hr>
+<h2 id="i-g-ker">I. 证明 G ⊆ ker Φ</h2>
+<p>要证：每个<strong>面转</strong>（因而它们生成的整个 \(G\)）都落在核里，即 \(\Phi(\text{面转})= (0,0,0)\)。</p>
+<p>只需检查六个生成元 \(U,D,L,R,F,B\)（逆与平方会自动继承）。</p>
+<h3 id="190">1）置换奇偶：90° 面转保持「角与棱奇偶一致」</h3>
+<p><span class="tag tag-proof">【证明】</span>固定转上面 \(U\) 90°（其它面同理）：</p>
+<ol>
+<li><strong>角块</strong>：上层四个角走一个 4-轮换，下层不动。<br>
+   4-轮换 = 3 个对换 = <strong>奇</strong>置换。  </li>
+<li><strong>棱块</strong>：上层四条棱同样走一个 4-轮换 = <strong>奇</strong>置换。  </li>
+</ol>
+<p>于是这次面转之后：角奇、棱奇——二者<strong>仍然一致</strong>。<br>
+若 \(\varepsilon=0\) 表示「一致」、\(\varepsilon=1\) 表示「不一致」，则 \(\varepsilon(U)=0\)。</p>
+<p><span class="tag tag-fact">【事实·可用代码核对】</span>对已解做一次 \(U\)，角置换奇偶与棱置换奇偶都变成 1（奇），但仍匹配；做 \(U^2\) 则二者都回到 0（偶）。见 <code>python/cube.py</code> 的不变量检查思路。</p>
+<p><span class="tag tag-proof">【直观】</span>面转不可能「只交换两个角却动都不动棱」——那种会让 \(\varepsilon=1\)，落在核外面，也就不在 \(G\) 里。</p>
+<p>（有些科普书写成「角、棱置换都必须是偶置换」。更精确的说法是：<strong>二者奇偶必须相同</strong>；90° 后面转可以同时为奇。计数 \(|P|/2\) 时，等价于「先任选棱排列，再只允许一半的角排列」。）</p>
+<h3 id="290-math120">2）扭转和：90° 面转不改变 \(\sum o_i \bmod 3\)</h3>
+<p><span class="tag tag-proof">【证明·直观计数】</span>转 \(U\) 时，下层四角不动（扭转 0）。上层四角：每个角块被带走时，相对「上下颜色朝上/朝下」的参考，扭转量会变，但四个角的扭转变化之和是 \(0 \bmod 3\)。</p>
+<p>直觉：整圈对称，不可能只「凭空扭出一个角的总量」；计算上四个角各贡献的扭转增量之和被 3 整除。<br>
+故 \(t(U)=0\)。其它面同理（转哪一面，就看那一面周围四个角的扭转增量）。</p>
+<h3 id="390-math124">3）翻转和：90° 面转不改变 \(\sum f_j \bmod 2\)</h3>
+<p><span class="tag tag-proof">【证明·直观计数】</span>转 \(U\) 时，四条上层棱走一圈：在标准「好翻转」定义下，这四条棱的翻转位要么都不变，要么成对改变，总和模 2 为 0。侧面竖直棱不动。故 \(f(U)=0\)。</p>
+<p><span class="tag tag-proof">【结论】</span>每个生成元在 \(\ker\Phi\) 里 ⇒ 它们生成的 \(G\subseteq\ker\Phi\)。</p>
+<hr>
+<h2 id="j-ker-g">J. 证明 ker Φ ⊆ G</h2>
+<p>反过来：凡是满足三条不变量的积木状态，都<strong>可以</strong>用面转拧出来。证明策略是<strong>构造性还原</strong>：给出四步，说明如何把任意核里的状态拧回已解（从而该状态 = 某面转词的结果 ∈ \(G\)）。</p>
+<h3 id="_16">四步还原大纲</h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>目标</th>
+<th>为何核条件够用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>把 8 个角放到正确位置（暂不管朝向）</td>
+<td>角置换是偶的 ⇒ 可分解为 3-轮换乘积</td>
+</tr>
+<tr>
+<td>2</td>
+<td>把 12 条棱放到正确位置（暂不管翻转）</td>
+<td>棱置换是偶的；且与角奇偶已匹配</td>
+</tr>
+<tr>
+<td>3</td>
+<td>拧正所有角朝向</td>
+<td>扭转和 ≡0 (mod 3) ⇒ 可成对/三元组修正</td>
+</tr>
+<tr>
+<td>4</td>
+<td>翻正所有棱朝向</td>
+<td>翻转和 ≡0 (mod 2) ⇒ 可成对修正</td>
+</tr>
+</tbody>
+</table>
+<p>下面解释「为什么需要偶置换」以及「交换子」思想。<strong>不</strong>在此列出每个算法的完整 20 步公式（那是进阶查表）；但讲清逻辑，并说明 demo <strong>只验证生成元与逆，不实现求解器</strong>。</p>
+<h3 id="math130">交换子思想 \(ABA^{-1}B^{-1}\)</h3>
+<p><span class="tag tag-conv">【约定】</span><strong>交换子</strong> \([A,B]=ABA^{-1}B^{-1}\)。</p>
+<p>白话：</p>
+<ol>
+<li>做动作 \(A\)（弄乱一小块区域）  </li>
+<li>做 \(B\)（把「被弄乱的部分」换到别处，或换一组块进来）  </li>
+<li>做 \(A^{-1}\)：在<strong>新位置</strong>上把那套弄乱<strong>撤销</strong>——于是原来位置大多恢复，只在 \(A\) 与 \(B\) 「交叠」的地方留下小尾巴  </li>
+<li>做 \(B^{-1}\)：再把架子挪回去  </li>
+</ol>
+<p>结果：大部分贴纸回到原处，只留下一个<strong>小循环</strong>（常见是角上的 3-轮换，或棱上的 3-轮换）。</p>
+<p><span class="tag tag-fact">【事实】</span>魔方竞速里许多「只动三个角、其它看起来不动」的公式，本質上都是交换子（或交换子的变体）。因此：</p>
+<blockquote>
+<p>「存在角 3-循环算法」不是魔法名字，而是：<strong>用交换子可以把面转组合成只含一个 3-轮换（外加可能的朝向变化）的元素</strong>；这类元素确实属于 \(G\)（因为由面转拼成）。</p>
+</blockquote>
+<p>Demo 不实现这些长公式；它只确认：单步面转是置换、序列可逆、回到已解。</p>
+<h3 id="_17">为何偶置换够用、奇置换不够</h3>
+<p><span class="tag tag-fact">【事实】</span>3-轮换是偶置换，且 \(A_n\)（\(n\ge 3\)）由 3-轮换生成。</p>
+<ul>
+<li>若角的位置置换是<strong>偶</strong>的，就可写成若干角 3-轮换之积；每个 3-轮换原则上对应某种交换子型面转词 ⇒ 能还原位置。  </li>
+<li>若只交换<strong>两个</strong>角（其余不动），这是奇置换，<strong>不在</strong> \(A_8\) 里，也无法写成 3-轮换之积——这正是「拆开对调两角再粘上」拧不回去的原因。</li>
+</ul>
+<p>棱同理。又因 \(\varepsilon\) 要求角、棱奇偶一致，不会出现「角偶但棱奇」这种核外观。</p>
+<h3 id="_18">扭两角 / 翻两棱生成核的朝向部分</h3>
+<p><span class="tag tag-fact">【事实】</span></p>
+<ul>
+<li>不能只扭<strong>一个</strong>角（\(t\neq 0\)）；但可以找到面转词，效果是「扭角 A +1、扭角 B −1（或等价地两个角同向配平到和为 0）」——这类元素生成扭转核。  </li>
+<li>不能只翻<strong>一条</strong>棱；但可以「同时翻两条棱」，生成翻转核。</li>
+</ul>
+<p><span class="tag tag-conv">【约定】</span>上文「这类动作确实可用面转写出」在完整群论证明里需要显式公式或引用已知生成结果；中学课标下把它标为<span class="tag tag-fact">【事实·可查证】</span>，完整字面公式见进阶附录或标准教材（如「角扭转交换子」「棱翻转算法」）。本课路径强调：<strong>核的条件恰好是这些生成过程能走通的充要障碍</strong>。</p>
+<h3 id="demo">与 demo 的分工</h3>
+<p><span class="tag tag-code">【代码】</span><code>demo.py</code> 流程：已解 → <code>R U R' U'</code> → 检查不变量 → 逆序列 → 已解。<br>
+它验证「生成元作用 + 逆 = 单位」，<strong>不是</strong>完整四步求解器。断言函数 <code>assert_reachable_invariants</code> 只抽查核条件的一部分（见 M 节）。</p>
+<hr>
+<h2 id="k">K. 结论</h2>
+<p><span class="tag tag-proof">【证明】</span>由 I：\(G\subseteq\ker\Phi\)。由 J：\(\ker\Phi\subseteq G\)。故</p>
+<p>\[
+G=\ker\Phi.
+\]</p>
+<p><span class="tag tag-fact">【事实】</span>\(\Phi:P\to C_2\times C_3\times C_2\) 满射时，</p>
+<p>\[
+|G|=|\ker\Phi|=\frac{|P|}{|C_2\times C_3\times C_2|}=\frac{|P|}{12}.
+\]</p>
+<p>代入 \(|P|=8!\cdot 3^8\cdot 12!\cdot 2^{12}\) 得</p>
+<p>\[
+|G|=43{,}252{,}003{,}274{,}489{,}856{,}000
+\]</p>
+<p>（约 \(4.3\times 10^{19}\)）。这是标准计数，<strong>不是</strong>视频里写出的数（视频没有数）。</p>
+<hr>
+<h2 id="l-b">L. 有限展示与路径 B</h2>
+<p><span class="tag tag-fact">【事实】</span>把六个面转看成自由群 \(F\) 的生成元，则有满同态 \(F\to G\)，其核 \(N=\ker(F\to G)\) 是「所有乘起来等于已解（单位元）的面转词」组成的正规子群。</p>
+<p>因 \(G\) 有限，存在<strong>有限展示</strong>：有限条关系 \(r_1=\cdots=r_m=1\)，使 \(N\) 等于它们的正规闭包（允许拿关系去共轭再相乘）。故「所有 =1 的词都能由这几条关系复合出来」在群论意义上成立。</p>
+<p><span class="tag tag-conv">【约定·路径 B】</span>相对「用三条不变量刻画 \(G=\ker\Phi\)」（本文主路径），路径 B 强调：用生成元 + 关系表呈现同一个 \(G\)。实务上关系表很长；工程与中学演示更常用不变量路径。仅 \(U^4=1\) 与「对面可交换」等局部关系<strong>不足以</strong>穷尽 \(N\)。</p>
+<p><span class="tag tag-video">【视频观察】</span>短片不涉及展示或关系表；它只是生成元作用的示意。</p>
+<hr>
+<h2 id="m">M. 代码精讲</h2>
+<p>对照真实文件：</p>
+<ul>
+<li><code>python/cube.py</code></li>
+<li><code>python/demo.py</code></li>
+</ul>
+<h3 id="m1-facelet-faces-solved_colors">M1. 编号 facelet / FACES / SOLVED_COLORS</h3>
+<p><span class="tag tag-code">【代码】</span></p>
+<pre><code class="language-python">FACES = (&quot;U&quot;, &quot;D&quot;, &quot;L&quot;, &quot;R&quot;, &quot;F&quot;, &quot;B&quot;)
+N_STICKERS = 54
+SOLVED_COLORS = &quot;&quot;.join(f * 9 for f in FACES)  # 54 个字符
+
+def facelet(face: str, i: int) -&gt; int:
+    return FACE_INDEX[face] * 9 + i
+</code></pre>
+<p>白话：六个面按 U,D,L,R,F,B 顺序，每面本地格子 <code>0..8</code>（看该面时的行列）：</p>
+<pre><code>0 1 2
+3 4 5
+6 7 8
+</code></pre>
+<p>绝对编号 = <code>面序号×9 + 本地号</code>。已解时颜色就用面字母自己：上面九格全是 <code>"U"</code>，等等。</p>
+<h3 id="m2-_perm_from_cycles">M2. <code>_perm_from_cycles</code>：轮换 → 数组</h3>
+<p><span class="tag tag-code">【代码】</span></p>
+<pre><code class="language-python">def _perm_from_cycles(cycles):
+    perm = list(range(54))          # 先做成恒等
+    for cycle in cycles:
+        for a, b in zip(cycle, cycle[1:]):
+            perm[a] = b
+        perm[cycle[-1]] = cycle[0]  # 最后回到开头
+    return perm
+</code></pre>
+<p>白话：<code>perm[i] = σ(i)</code>。若轮换是 <code>(10, 11, 12, 13)</code>，则 <code>perm[10]=11</code>, <code>perm[11]=12</code>, <code>perm[12]=13</code>, <code>perm[13]=10</code>。</p>
+<h3 id="m3-_face_cw_cycles-_u_side">M3. <code>_face_cw_cycles</code> 与 <code>_U_side</code> 等</h3>
+<p><span class="tag tag-code">【代码】</span>本面两个 4-轮换（角与棱）：</p>
+<pre><code class="language-python"># 角：0→2→8→6→0 ；棱：1→5→7→3→1
+</code></pre>
+<p>侧面例如 <code>_U_side</code>：上面顺时针时，F/L/B/R 的顶行三条边各自做一个 4-轮换。<br>
+<code>_build_generators</code> 把「本面轮换 + 侧面轮换」拼起来，得到 <code>GENERATORS["U"]</code> 等。</p>
+<h3 id="m4-generators-moves-invert-u">M4. GENERATORS / MOVES / invert / U'</h3>
+<p><span class="tag tag-code">【代码】</span></p>
+<pre><code class="language-python">GENERATORS = _build_generators()   # 六个 90° 顺时针
+MOVES = all_moves()                # 含 U, U', U2, …
+# U' = invert_perm(U 的数组)
+# U2 = U 复合两次
+</code></pre>
+<p>白话：<code>U'</code> 是把箭头全部反转；数组上：若 <code>p[i]=j</code>，则逆置换满足 <code>inv[j]=i</code>。</p>
+<h3 id="m5-applynewpermi-oldi">M5. <code>apply</code>：<code>new[perm[i]] = old[i]</code> 的几何含义</h3>
+<p><span class="tag tag-code">【代码】</span></p>
+<pre><code class="language-python">def apply(state, move):
+    perm = MOVES[move]
+    new = [&quot;&quot;] * 54
+    for i, color in enumerate(state):
+        new[perm[i]] = color
+    return new
+</code></pre>
+<p>白话：原来在位置 <code>i</code> 的那张颜色贴纸，被搬到位置 <code>perm[i]</code>。<br>
+所以新数组在下标 <code>perm[i]</code> 处应写上旧的 <code>state[i]</code>。这与「置换作用在位置上」的几何一致。</p>
+<h3 id="m6-apply_sequence-inverse_sequence">M6. <code>apply_sequence</code> / <code>inverse_sequence</code></h3>
+<p><span class="tag tag-code">【代码】</span>序列从左到右依次 <code>apply</code>。<br>
+逆序列：颠倒顺序，并对每个记号取逆（<code>R</code>↔<code>R'</code>，<code>R2</code> 仍是 <code>R2</code>）。</p>
+<p>例：<code>R U R' U'</code> 的逆是 <code>U R U' R'</code>。</p>
+<h3 id="m7-is_solved-demo">M7. <code>is_solved</code> 与 demo 流程</h3>
+<p><span class="tag tag-code">【代码】</span><code>is_solved</code>：颜色数组是否等于 <code>SOLVED_COLORS</code>。</p>
+<p><code>demo.py</code> 五步：</p>
+<ol>
+<li>打印模型与六个生成元动了多少贴纸  </li>
+<li>已解状态 + 三环 ASCII  </li>
+<li>拧 <code>R U R' U'</code>，检查不变量，打印展开图与贴纸表  </li>
+<li>施加逆序列  </li>
+<li>断言回到已解  </li>
+</ol>
+<h3 id="m8-rings_str-ascii">M8. <code>rings_str</code>：三环 ASCII 与视频对齐</h3>
+<p><span class="tag tag-code">【代码】</span>取 U/R/F 三个生成元里各一条<strong>棱 4-轮换</strong>，打印当前颜色：</p>
+<pre><code class="language-text">Three interlocking rings (edge 4-cycles from U / R / F):
+  U-ring: (… → …)
+  R-ring: (… → …)
+  F-ring: (… → …)
+</code></pre>
+<p><span class="tag tag-conv">【约定】</span>这是呼应视频「三环」的示意，不是六面六环，也不声称等于 Cayley 图。</p>
+<h3 id="m9-assert_reachable_invariants">M9. <code>assert_reachable_invariants</code> 在查什么</h3>
+<p><span class="tag tag-code">【代码】</span>根据角/棱贴纸颜色集合，恢复角置换与棱置换，然后检查：</p>
+<ol>
+<li>角置换奇偶 <strong>等于</strong> 棱置换奇偶  </li>
+<li>角扭转和 \(\equiv 0\pmod{3}\)  </li>
+<li>棱翻转和会计算但不作为硬失败条件（实现注释写明 facelet 规则较细、避免误杀）</li>
+</ol>
+<p>合法面转序列后这些应成立；用手拆出「只换两角」的状态则会触发断言。</p>
+<hr>
+<h2 id="n">N. 如何运行</h2>
+<p>网页与 Python 对照：在 <a href="index.html">交互 demo</a> 上点 <strong>Apply scramble</strong> / <strong>Apply inverse</strong>，对应 <code>python/demo.py</code> 的「拧乱 → 取逆 → 已解」。默认拧法都是 <code>R U R' U'</code>。</p>
+<p>在仓库根目录执行（Python 3.10+，仅标准库；有 <code>.venv</code> 也可用其中的解释器）：</p>
+<pre><code class="language-bash">python3 python/demo.py
+python3 python/demo.py "F R U R' U' F'"</code></pre>
+<p>等价写法：<code>cd python &amp;&amp; python3 demo.py</code>。完整样例输出（默认 scramble）见静态文件 <a href="sample-output.txt">sample-output.txt</a>。摘录：</p>
+<pre>3. Scramble: R U R' U'
+tokens: ['R', 'U', "R'", "U'"]
+...
+solved=False  stickers_off_home=12
+
+4. Inverse sequence → expect solved
+inverse tokens: ['U', 'R', "U'", "R'"]
+...
+solved=True  stickers_off_home=0
+
+5. Result
+scramble then inverse returns to solved: True
+OK — face turns permute stickers; inverse restores identity.</pre>
+<p><iframe src="sample-output.txt" title="python/demo.py 默认 scramble 的完整样例输出" style="width:100%;height:18rem;border:1px solid var(--border);border-radius:8px;background:#1e2430;"></iframe></p>
+<p><code>themathflow.mp4</code> 只作本地参考，不随本仓库上传；片内无文字、无公式，本页不发明「视频公式」。</p>
+<hr>
+<h2 id="o">O. 事实 / 假设 / 未证明清单</h2>
+<h3 id="_19"><span class="tag tag-fact">【事实】</span>清单</h3>
+<ul>
+<li>54 贴纸；8 角、12 棱、6 中心  </li>
+<li>面转是置换；\(G=\langle U,D,L,R,F,B\rangle\)；单位元 = 已解  </li>
+<li>\(|P|=8!\cdot 3^8\cdot 12!\cdot 2^{12}\)；\(|G|=|P|/12\) 及精确大数  </li>
+<li>三条不变量：角/棱置换奇偶一致、扭转和 ≡0 (mod 3)、翻转和 ≡0 (mod 2)  </li>
+<li>视频：三交叠环、无文字公式（画面观察见 <a href="docs/math.md">docs/math.md</a> 的【视频观察】；本仓库未收录独立 <code>video-notes.md</code>）  </li>
+<li>demo 验证生成元与逆，不是完整求解器  </li>
+</ul>
+<h3 id="_20">【假设 / 约定】清单</h3>
+<ul>
+<li>视频三环 = 生成元轮换轨道的投影示意（非官方定理）  </li>
+<li>复合顺序、扭转符号（+1/−1）的具体标定  </li>
+<li>\(\varepsilon\) 分量「一致/不一致」的 0/1 编码细节  </li>
+</ul>
+<h3 id="_21">【未在本文逐步写出公式】清单（进阶可查）</h3>
+<ul>
+<li>每个显式的角 3-循环 / 棱 3-循环面转词（交换子展开后的完整步骤表）  </li>
+<li>扭两角、翻两棱的标准竞速公式全文  </li>
+<li>\(\Phi\) 作为同态的逐块代数验证  </li>
+<li>用生成元逐一验算「角奇偶始终等于棱奇偶」的完整表格式细账（本文 I 节已给 90° 直观论证）  </li>
+<li>Rubik 群的显式有限展示关系表（路径 B 的全表）  </li>
+</ul>
+<p>这些不影响主线：\(G=\ker\Phi\) 与 \(|G|=|P|/12\) 的逻辑骨架，以及代码与三环可视化。</p>
+<hr>
+<h2 id="_22">路径索引</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本文 Markdown</td>
+<td><a href="teach.md"><code>teach.md</code></a>（站点根目录）</td>
+</tr>
+<tr>
+<td>本文 HTML</td>
+<td><a href="teach.html"><code>teach.html</code></a></td>
+</tr>
+<tr>
+<td>交互 demo</td>
+<td><a href="index.html"><code>index.html</code></a></td>
+</tr>
+<tr>
+<td>数学简报</td>
+<td><a href="docs/math.md"><code>docs/math.md</code></a></td>
+</tr>
+<tr>
+<td>Python 参考</td>
+<td><code>python/cube.py</code>、<code>python/demo.py</code></td>
+</tr>
+<tr>
+<td>样例输出</td>
+<td><a href="sample-output.txt"><code>sample-output.txt</code></a></td>
+</tr>
+<tr>
+<td>视频</td>
+<td><code>themathflow.mp4</code> 仅本地参考（未上传）</td>
+</tr>
+</tbody>
+</table>
+</article>
+</main>
+<footer>源文件 <a href="teach.md">teach.md</a> · 数学公式 KaTeX（cdn.jsdelivr）· 简报 <a href="docs/math.md">docs/math.md</a> · 三环非六环 · <a href="index.html">交互 demo</a></footer>
+</div>
+</body>
+</html>

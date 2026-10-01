@@ -31,6 +31,18 @@ header h1 {
   font-size: 1.65rem;
   letter-spacing: -0.02em;
 }
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+}
+.site-nav a[aria-current="page"] {
+  font-weight: 600;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.1rem;
+}
 header .sub {
   color: var(--muted);
   margin: 0 0 1.25rem;
@@ -183,12 +195,24 @@ button.okish {
   font-size: 0.95rem;
 }
 .math ul { padding-left: 1.2rem; }
-.math code, footer code {
+.math code, footer code, #run-demo code {
   font-family: var(--mono);
   font-size: 0.88em;
   background: #0c1015;
   padding: 0.05em 0.35em;
   border-radius: 4px;
+}
+.run-pre {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background: #0c1015;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  color: var(--muted);
+  margin: 0.5rem 0 0.75rem;
 }
 footer {
   margin-top: 1.5rem;
