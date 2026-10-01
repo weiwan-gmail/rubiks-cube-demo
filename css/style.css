@@ -1,0 +1,199 @@
+:root {
+  --bg: #0f1419;
+  --panel: #1a222c;
+  --text: #e7ecf1;
+  --muted: #9aa7b5;
+  --accent: #7aa2ff;
+  --ok: #3dd68c;
+  --no: #ff6b7a;
+  --border: #2a3542;
+  --font: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+}
+a { color: var(--accent); }
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+header .sub {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+  max-width: 46rem;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+label { font-size: 0.9rem; color: var(--muted); }
+input[type="text"] {
+  flex: 1 1 220px;
+  min-width: 180px;
+  background: #0c1015;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+}
+button {
+  background: #243044;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+}
+button:hover { border-color: var(--accent); }
+button.primary {
+  background: #2a4a8a;
+  border-color: #3d6bc4;
+}
+button.okish {
+  background: #1e4a38;
+  border-color: #2d7a58;
+}
+.move-pad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+.move-pad button {
+  font-family: var(--mono);
+  min-width: 2.4rem;
+  padding: 0.35rem 0.5rem;
+}
+#status { margin: 0.5rem 0; }
+.pill {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  background: #0c1015;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  margin-right: 0.35rem;
+}
+.pill.ok { border-color: var(--ok); color: var(--ok); }
+.pill.no { border-color: var(--no); color: var(--no); }
+.muted { color: var(--muted); font-size: 0.9rem; }
+#tokens {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  word-break: break-word;
+}
+#error {
+  color: var(--no);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+#net {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+}
+.net-row {
+  display: flex;
+  gap: 0.35rem;
+}
+.face {
+  position: relative;
+  width: 96px;
+  flex: 0 0 96px;
+}
+.face-empty { width: 96px; height: 96px; visibility: hidden; }
+.face-label {
+  position: absolute;
+  top: -0.9rem;
+  left: 0;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  width: 96px;
+  height: 96px;
+  background: #080b0f;
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.cell {
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.35);
+}
+.layout-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 760px) {
+  .layout-2col { grid-template-columns: 1fr; }
+}
+#rings-svg { display: flex; justify-content: center; }
+#rings-text {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: pre-wrap;
+  margin: 0.5rem 0 0;
+}
+.math {
+  font-size: 0.95rem;
+}
+.math ul { padding-left: 1.2rem; }
+.math code, footer code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: #0c1015;
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+}
+footer {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}

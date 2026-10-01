@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rubik’s Cube facelet demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Rubik’s Cube — 54-sticker demo</h1>
+      <p class="sub">
+        Face turns are permutations of 54 facelets. Scramble, then apply the inverse —
+        you return to the identity (solved). Based on the local derivation demo;
+        <a href="https://x.com/TheMathFlow/status/2101154346583154801" rel="noopener">TheMathFlow</a>
+        video is inspiration only (no on-screen formulas invented here). Not a CFOP solver.
+      </p>
+    </header>
+
+    <section class="panel">
+      <h2>Moves</h2>
+      <div class="controls">
+        <label for="sequence">Sequence</label>
+        <input id="sequence" type="text" value="R U R' U'" spellcheck="false" autocomplete="off" />
+        <button type="button" id="btn-scramble" class="primary">Apply scramble</button>
+        <button type="button" id="btn-inverse" class="okish">Apply inverse</button>
+        <button type="button" id="btn-apply">Apply to current</button>
+        <button type="button" id="btn-reset">Reset</button>
+      </div>
+      <div class="move-pad" aria-label="Single face turns">
+        <button type="button" data-move="U">U</button>
+        <button type="button" data-move="U'">U'</button>
+        <button type="button" data-move="U2">U2</button>
+        <button type="button" data-move="D">D</button>
+        <button type="button" data-move="D'">D'</button>
+        <button type="button" data-move="D2">D2</button>
+        <button type="button" data-move="L">L</button>
+        <button type="button" data-move="L'">L'</button>
+        <button type="button" data-move="L2">L2</button>
+        <button type="button" data-move="R">R</button>
+        <button type="button" data-move="R'">R'</button>
+        <button type="button" data-move="R2">R2</button>
+        <button type="button" data-move="F">F</button>
+        <button type="button" data-move="F'">F'</button>
+        <button type="button" data-move="F2">F2</button>
+        <button type="button" data-move="B">B</button>
+        <button type="button" data-move="B'">B'</button>
+        <button type="button" data-move="B2">B2</button>
+      </div>
+      <div id="status"></div>
+      <div id="tokens"></div>
+      <p id="error" hidden></p>
+    </section>
+
+    <div class="layout-2col">
+      <section class="panel">
+        <h2>Face net</h2>
+        <div id="net" aria-live="polite"></div>
+      </section>
+      <section class="panel">
+        <h2>Three interlocking rings</h2>
+        <p class="muted" style="margin-top:0">
+          Edge 4-cycles from generators U / R / F (video motif is three rings, not six).
+        </p>
+        <div id="rings-svg"></div>
+        <pre id="rings-text"></pre>
+      </section>
+    </div>
+
+    <section class="panel math">
+      <h2>How this maps to the math</h2>
+      <p lang="zh-CN">
+        <strong>中文简述：</strong>已还原态 = 群单位元。六个面转生成元是 54 贴纸上的置换；
+        串乘对应复合；逆序列把状态送回单位元。详见
+        <a href="docs/math.md">docs/math.md</a>。本页不发明视频里没有的公式。
+      </p>
+      <ul>
+        <li><strong>Identity = solved:</strong> all 54 stickers on home colors → <code>solved=true</code>.</li>
+        <li><strong>Generators:</strong> <code>U D L R F B</code> (and <code>'</code> / <code>2</code>) as length-54 perms.</li>
+        <li><strong>Scramble then inverse:</strong> word \(w\) then \(w^{-1}\) restores \(e\).</li>
+        <li>Full writeup (Chinese, fact / video / hypothesis tagged): <a href="docs/math.md">docs/math.md</a>.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        Repo: <a href="https://github.com/weiwan-gmail/rubiks-cube-demo">weiwan-gmail/rubiks-cube-demo</a>
+        · Static HTML/CSS/JS · Python reference under <code>python/</code>
+        · Local: open <code>index.html</code> or <code>python3 -m http.server</code> in the repo root.
+      </p>
+    </footer>
+  </main>
+  <script src="js/cube.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
