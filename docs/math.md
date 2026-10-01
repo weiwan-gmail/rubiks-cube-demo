@@ -2,7 +2,9 @@
 
 面向：配合 TheMathFlow 可视化短片与可运行 demo，从第一性原理走到「群作用 → 不变量 → 复原」。
 
-参考视频（本地）：`/workspace/rubiks-cube/themathflow.mp4`  
+中文课（长版，【事实】/【视频观察】/【假设】标签）：[teach.html](../teach.html)（源 [teach.md](../teach.md)）。交互贴纸 demo：[index.html](../index.html)。Pages：https://weiwan-gmail.github.io/rubiks-cube-demo/
+
+参考视频（**仅本地**，未上传本仓库）：`themathflow.mp4`  
 来源：[TheMathFlow on X](https://x.com/TheMathFlow/status/2101154346583154801)
 
 文中标注：
@@ -27,7 +29,7 @@
 
 贴纸模型与块模型等价：贴纸位置被块带着走。Demo 里用「54 贴纸置换」和视频的圆点一致；证明阶数时用块+朝向更省事。
 
-**[视频观察]** 短片一侧是实体面转动，另一侧是色点排在 **三个交叠圆环** 的轨道上（点色对应六面）；面一转，某一环高亮且点同步滑动。还原时点收成六个单色菱形簇。片内**无文字、无公式**；X 帖包装可提 graph theory，但画面本身没有。详见同目录 `video-notes.md`。
+**[视频观察]** 短片一侧是实体面转动，另一侧是色点排在 **三个交叠圆环** 的轨道上（点色对应六面）；面一转，某一环高亮且点同步滑动。还原时点收成六个单色菱形簇。片内**无文字、无公式**；X 帖包装可提 graph theory，但画面本身没有。
 
 ---
 
@@ -175,8 +177,12 @@ G = \langle U,D,L,R,F,B \rangle
 
 | 文件 | 路径 |
 |------|------|
-| 本文（权威） | `/home/box/agent-data/agents/c4d2f3f6-c24a-4531-9b66-b27a993ff5ff/docs/rubiks-cube/math.md` |
-| 工作区镜像 | `/workspace/docs/rubiks-cube/math.md` |
-| 与代码同目录副本 | `/workspace/rubiks-cube/docs/math.md` |
-| 视频笔记 | 同目录 `video-notes.md` |
+| 本文 | [docs/math.md](math.md) |
+| 中文课 | [teach.html](../teach.html) / [teach.md](../teach.md) |
+| 交互 demo | [index.html](../index.html) |
+| Python | `python/cube.py`、`python/demo.py` |
+| 样例输出 | [sample-output.txt](../sample-output.txt) |
+| 视频 | `themathflow.mp4` 仅本地参考（未上传） |
+
+如何运行：仓库根目录 `python3 python/demo.py`（与网页 Apply scramble / inverse 同一回路）。
 

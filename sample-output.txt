@@ -1,0 +1,82 @@
+
+============================================================
+1. Model: 54 stickers, six face-turn generators
+============================================================
+N_STICKERS = 54
+Faces: U D L R F B  (each 9 facelets, ids face*9 + 0..8)
+  U: perm sends 20 stickers (center fixed); e.g. 0→2
+  D: perm sends 20 stickers (center fixed); e.g. 0→0
+  L: perm sends 20 stickers (center fixed); e.g. 0→36
+  R: perm sends 20 stickers (center fixed); e.g. 0→0
+  F: perm sends 20 stickers (center fixed); e.g. 0→0
+  B: perm sends 20 stickers (center fixed); e.g. 0→24
+
+============================================================
+2. Start: solved (identity)
+============================================================
+        U U U
+        U U U
+        U U U
+L L L  F F F  R R R  B B B
+L L L  F F F  R R R  B B B
+L L L  F F F  R R R  B B B
+        D D D
+        D D D
+        D D D
+solved=True  stickers_off_home=0
+Three interlocking rings (edge 4-cycles from U / R / F):
+  U-ring: (F → L → B → R → …)
+  R-ring: (U → B → D → F → …)
+  F-ring: (U → R → D → L → …)
+  (shared stickers at face meetings = interlocking)
+
+============================================================
+3. Scramble: R U R' U'
+============================================================
+tokens: ['R', 'U', "R'", "U'"]
+invariants: corner/edge parity match, corner twist sum ≡ 0 (mod 3)
+        U U L
+        U U F
+        U U F
+B L L  F F D  R R U  B R R
+L L L  F F U  B R R  B B B
+L L L  F F F  U R R  B B B
+        D D R
+        D D D
+        D D D
+solved=False  stickers_off_home=12
+Three interlocking rings (edge 4-cycles from U / R / F):
+  U-ring: (F → L → R → R → …)
+  R-ring: (F → B → D → U → …)
+  F-ring: (U → B → D → L → …)
+  (shared stickers at face meetings = interlocking)
+--- sticker list (index:color) ---
+00:U 01:U 02:L 03:U 04:U 05:F 06:U 07:U 08:F 09:D 10:D 11:R 12:D 13:D 14:D 15:D 16:D 17:D
+18:B 19:L 20:L 21:L 22:L 23:L 24:L 25:L 26:L 27:R 28:R 29:U 30:B 31:R 32:R 33:U 34:R 35:R
+36:F 37:F 38:D 39:F 40:F 41:U 42:F 43:F 44:F 45:B 46:R 47:R 48:B 49:B 50:B 51:B 52:B 53:B
+
+============================================================
+4. Inverse sequence → expect solved
+============================================================
+inverse tokens: ['U', 'R', "U'", "R'"]
+        U U U
+        U U U
+        U U U
+L L L  F F F  R R R  B B B
+L L L  F F F  R R R  B B B
+L L L  F F F  R R R  B B B
+        D D D
+        D D D
+        D D D
+solved=True  stickers_off_home=0
+Three interlocking rings (edge 4-cycles from U / R / F):
+  U-ring: (F → L → B → R → …)
+  R-ring: (U → B → D → F → …)
+  F-ring: (U → R → D → L → …)
+  (shared stickers at face meetings = interlocking)
+
+============================================================
+5. Result
+============================================================
+scramble then inverse returns to solved: True
+OK — face turns permute stickers; inverse restores identity.
